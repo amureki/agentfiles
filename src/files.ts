@@ -67,10 +67,12 @@ export function inspectFile(path: string, dotfiles: string): FileInfo {
     resolved,
     links,
     exists,
-    managed: inside(
-      resolved,
-      existsSync(dotfiles) ? realpathSync(dotfiles) : dotfiles,
-    ),
+    managed:
+      Boolean(dotfiles) &&
+      inside(
+        resolved,
+        existsSync(dotfiles) ? realpathSync(dotfiles) : dotfiles,
+      ),
   };
   if (exists && statSync(resolved).isFile()) {
     try {
@@ -149,7 +151,7 @@ export function expectedTarget(
   home: string,
   dotfiles: string,
 ): string | undefined {
-  if (!inside(path, home)) return;
+  if (!dotfiles || !inside(path, home)) return;
   const expected = join(dotfiles, relative(home, path));
   if (existsSync(expected) && statSync(expected).isFile())
     return realpathSync(expected);

@@ -211,14 +211,14 @@ function render() {
     </aside>
     <main class="main">
 
-      <div class="page-heading"><div><h1>${category === "all" ? "Configuration" : titles[category]}</h1><p>Read-only · Global configuration · availability on next load</p></div><button class="button" id="refresh" aria-label="Refresh configuration" ${busy ? "disabled" : ""}>${icon("refresh", busy ? "spinning" : "")}<span>Refresh</span></button></div>
+      <div class="page-heading"><div><h1>${category === "all" ? "Configuration" : titles[category]}</h1><p>${inventory.demo ? "Demo · Sample data · " : ""}Read-only · Global configuration · availability on next load</p></div><button class="button" id="refresh" aria-label="Refresh configuration" ${busy ? "disabled" : ""}>${icon("refresh", busy ? "spinning" : "")}<span>Refresh</span></button></div>
       ${inventory.warnings.length ? `<div class="scan-warning">${icon("info")}<div>${inventory.warnings.map((w) => `<p>${escape(w)}</p>`).join("")}</div></div>` : ""}
       <div class="workspace ${selectedId ? "has-selection" : ""}"><section class="inventory-panel" aria-label="Configuration inventory">
         <div class="toolbar"><label class="search">${icon("search")}<input id="search" type="search" placeholder="Find a configuration…" aria-label="Search configuration" value="${escape(query)}"><kbd>⌘ K</kbd></label><label class="source-filter"><span class="sr-only">Filter source</span><select id="source-filter"><option value="all">All sources</option><option value="dotfiles">Dotfiles</option><option value="local">Local</option><option value="plugin">Plugins</option><option value="package">Packages</option><option value="built-in">Built-in</option></select></label></div>
         <div class="table-scroll"><table><thead><tr><th scope="col">Configuration</th><th scope="col">Codex</th><th scope="col">Pi</th></tr></thead><tbody id="rows"></tbody></table><div id="empty" class="empty" hidden>${icon("search")}<h2>No matching configuration</h2><p>Try another search or source filter.</p><button class="button" id="clear-filters">Clear filters</button></div></div>
         <footer class="inventory-footer"><span id="result-count"></span></footer>
       </section><aside class="inspector" aria-label="Source inspector" id="inspector">${renderInspector()}</aside></div>
-      <footer class="page-footer"><span>${icon("folder")}<span title="${escape(inventory.dotfiles)}">${escape(shortPath(inventory.dotfiles))}</span></span><span>Scanned ${new Date(inventory.scannedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span></footer>
+      <footer class="page-footer"><span>${icon("folder")}<span title="${escape(inventory.dotfiles)}">${escape(inventory.dotfiles ? shortPath(inventory.dotfiles) : "Dotfiles not configured · optional")}</span></span><span>Scanned ${new Date(inventory.scannedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span></footer>
     </main></div>`;
   (document.querySelector("#source-filter") as HTMLSelectElement).value =
     source;

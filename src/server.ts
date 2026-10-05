@@ -9,13 +9,27 @@ import { readDetail } from "./discovery.ts";
 import { scan } from "./adapters.ts";
 import type { ScanOptions } from "./adapters.ts";
 
+import { createDemoHome } from "./demo.ts";
+
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const home = resolve(process.env.MYAI_HOME ?? homedir());
+const demo = process.argv.includes("--demo") ? createDemoHome() : undefined;
+const home = demo?.home ?? resolve(process.env.MYAI_HOME ?? homedir());
 const options: ScanOptions = {
   home,
-  dotfiles: resolve(process.env.MYAI_DOTFILES ?? join(home, "dev/dotfiles")),
-  codexDir: resolve(process.env.CODEX_HOME ?? join(home, ".codex")),
-  piDir: resolve(process.env.PI_CODING_AGENT_DIR ?? join(home, ".pi/agent")),
+  dotfiles: demo
+    ? join(home, "dotfiles")
+    : process.env.MYAI_DOTFILES
+      ? resolve(process.env.MYAI_DOTFILES)
+      : "",
+  codexDir: demo
+    ? join(home, ".codex")
+    : resolve(process.env.CODEX_HOME ?? join(home, ".codex")),
+  piDir: demo
+    ? join(home, ".pi/agent")
+    : resolve(process.env.PI_CODING_AGENT_DIR ?? join(home, ".pi/agent")),
+  versions: demo
+    ? { codex: "Sample version", pi: "Sample version" }
+    : undefined,
 };
 const first = scan(options);
 options.versions = Object.fromEntries(
@@ -54,7 +68,7 @@ const server = createServer((request, response) => {
   try {
     if (request.method === "GET") {
       if (url.pathname === "/api/inventory")
-        return json(response, 200, scan(options));
+        return json(response, 200, { ...scan(options), demo: Boolean(demo) });
       if (url.pathname === "/api/detail")
         return json(
           response,
@@ -88,7 +102,15 @@ server.on("error", (error) => {
 server.listen(port, "127.0.0.1", () => {
   const address = server.address();
   base = `http://127.0.0.1:${typeof address === "object" && address ? address.port : port}`;
-  console.log(`My AI → ${base}\nDotfiles: ${options.dotfiles}`);
+  console.log(
+    `My AI → ${base}\nDotfiles: ${options.dotfiles || "Not configured (optional)"}`,
+  );
   if (!process.argv.includes("--no-open") && process.platform === "darwin")
     execFile("open", [base]);
 });
+
+if (demo) {
+  process.on("exit", demo.cleanup);
+  for (const signal of ["SIGINT", "SIGTERM"] as const)
+    process.on(signal, () => server.close(() => process.exit()));
+}

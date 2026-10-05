@@ -12,7 +12,7 @@ Confirmed proposal: local TypeScript server and browser UI. Framework choice del
 
 ## Users
 
-The owner of a macOS dotfiles repository who uses Codex and Pi and wants to discover and inspect their global configuration.
+People who use Codex or Pi and want to discover and inspect their global configuration. Dotfiles repositories are optional.
 
 ## Product Purpose
 
@@ -20,7 +20,7 @@ Show each harness's configuration, its source, version, and link health. Provide
 
 ## Operating Context
 
-GNU Stow links files from dotfiles into the home directory. Instructions can share one source. Skills also live outside dotfiles. Different harness configurations are intentional.
+Users can store configuration directly in harness directories or link it from a dotfiles repository, including with GNU Stow. Instructions can share one source. Skills also live outside dotfiles. Different harness configurations are intentional.
 
 ## Capabilities and Constraints
 
@@ -35,7 +35,7 @@ First iteration covers global Codex and Pi instructions, skills, Pi extensions a
 
 ## Brand Commitments
 
-Minimal and function first. White, dark text, and neutral gray tones. Use system typography, thin dividers, compact headings, and direct labels. No editorial styling, decorative brand marks, or reassurance copy. Alex Carpenter’s site is a reference for visual restraint, not page composition. Approved first surface: comparison table and source detail panel. Working name inferred from repository: My AI.
+Minimal and function first. White, dark text, and neutral gray tones. Use system typography, thin dividers, compact headings, and direct labels. No editorial styling, decorative brand marks, or reassurance copy. Approved first surface: comparison table and source detail panel. Working name inferred from repository: My AI.
 
 ## Evidence on Hand
 

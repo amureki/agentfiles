@@ -227,3 +227,16 @@ test("skill origins follow canonical installed paths, not name prefixes", (t) =>
     ),
   );
 });
+
+test("dotfiles are optional and direct harness discovery remains available", (t) => {
+  const { options } = fixture(t);
+  const inventory = scan({ ...options, dotfiles: "" });
+  assert.equal(inventory.dotfiles, "");
+  assert.equal(inventory.warnings.length, 0);
+  assert.ok(inventory.items.some((item) => item.name === "sample"));
+  assert.ok(
+    inventory.items.every((item) =>
+      item.placements.every((p) => !p.file.managed),
+    ),
+  );
+});

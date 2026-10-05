@@ -11,7 +11,8 @@
     "start": "npm run build && node src/server.ts",
     "dev": "node --watch-path=src --watch-preserve-output scripts/dev.mjs",
     "check": "tsc --noEmit",
-    "test": "node --test test/*.test.ts"
+    "test": "node --test test/*.test.ts",
+    "demo": "npm run build && node src/server.ts --demo"
   },
   "dependencies": {
     "picomatch": "^4.0.3",
@@ -24,5 +25,7 @@
     "esbuild": "^0.25.0",
     "prettier": "^3.9.9",
     "typescript": "^5.9.0"
-  }
+  },
+  "license": "MIT",
+  "description": "Read-only local configuration discovery for Codex and Pi"
 }

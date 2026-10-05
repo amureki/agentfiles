@@ -46,6 +46,7 @@ export interface Harness {
   installed: boolean;
 }
 export interface Inventory {
+  demo?: boolean;
   items: Item[];
   harnesses: Harness[];
   scannedAt: string;

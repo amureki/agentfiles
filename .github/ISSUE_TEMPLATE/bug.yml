@@ -1,0 +1,24 @@
+name: Bug report
+description: Report a discovery or interface problem.
+body:
+  - type: markdown
+    attributes:
+      value: Use synthetic examples. Remove personal paths, private project names, credentials, and prompt content before submitting.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Prefer npm run demo or a minimal synthetic fixture.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Node.js version, and affected harness/version. Do not include account details.

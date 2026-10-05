@@ -279,7 +279,9 @@ export const codexAdapter: HarnessAdapter = {
     for (const root of roots) {
       const paths = walk(root, (p) => basename(p) === "SKILL.md");
       const stored = join(options.dotfiles, relative(options.home, root));
-      for (const p of walk(stored, (p) => basename(p) === "SKILL.md")) {
+      for (const p of options.dotfiles
+        ? walk(stored, (p) => basename(p) === "SKILL.md")
+        : []) {
         const installed = join(root, relative(stored, p));
         if (!paths.includes(installed)) paths.push(installed);
       }
@@ -453,7 +455,7 @@ export const piAdapter: HarnessAdapter = {
               ["index.ts", "index.js"].includes(basename(p)),
           );
         const stored = join(options.dotfiles, relative(options.home, root));
-        if (inside(root, options.home))
+        if (options.dotfiles && inside(root, options.home))
           for (const p of walk(
             stored,
             accept,
@@ -564,7 +566,7 @@ export const adapters: HarnessAdapter[] = [codexAdapter, piAdapter];
 export function scan(options: ScanOptions): Inventory {
   const items: Item[] = [],
     warnings: string[] = [];
-  if (!existsSync(options.dotfiles))
+  if (options.dotfiles && !existsSync(options.dotfiles))
     warnings.push(
       `Dotfiles directory not found: ${options.dotfiles}. Set MYAI_DOTFILES to your repository path.`,
     );

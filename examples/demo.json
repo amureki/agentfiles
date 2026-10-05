@@ -1,0 +1,11 @@
+{
+  "dotfiles/AGENTS.md": "# Example instructions\n\nKeep changes small. Explain validation results.\n",
+  ".codex/config.toml": "model = \"example-model\"\n[[skills.config]]\npath = \"~/.agents/skills/release-check/SKILL.md\"\nenabled = false\n",
+  ".pi/agent/settings.json": "{\"defaultModel\":\"example-model\",\"skills\":[],\"extensions\":[]}",
+  ".agents/skills/release-check/SKILL.md": "---\nname: release-check\ndescription: Check a sample release checklist before publishing.\nversion: 1.0.0\n---\n\nReview the changelog and local validation results.\n",
+  ".agents/skills/project-notes/SKILL.md": "---\nname: project-notes\ndescription: Summarize project decisions and follow-up tasks.\nversion: 1.0.0\n---\n\nUse short notes and record open questions.\n",
+  "dotfiles/.agents/skills/code-review/SKILL.md": "---\nname: code-review\ndescription: Inspect a change for defects and missing checks.\n---\n\nRead the change and report concrete findings.\n",
+  ".agents/.skill-lock.json": "{\"version\":3,\"skills\":{\"release-check\":{\"sourceType\":\"github\",\"source\":\"example/workflows\"},\"project-notes\":{\"sourceType\":\"github\",\"source\":\"example/workflows\"}}}",
+  ".pi/agent/extensions/session-notes.ts": "// Synthetic extension for discovery examples.\nexport default function sessionNotes() {}\n",
+  ".codex/rules/default.rules": "# Synthetic example permission rule\nprefix_rule(pattern=[\"git\", \"status\"], decision=\"allow\")\n"
+}
