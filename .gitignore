@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.myai/
+.impeccable/mocks/
+.impeccable/screenshots/
+*.log
