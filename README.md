@@ -66,3 +66,5 @@ The stack is Node's HTTP server, plain TypeScript, a bundled browser script, and
 `src/adapters.ts` owns harness discovery and interpretation. `src/files.ts` owns file and link inspection. `src/discovery.ts` reads source details. `src/server.ts` exposes the read-only local API. `src/client/` owns the interface. Add a harness adapter without moving existing sources or introducing write operations.
 
 Repository skill groups use the recorded GitHub origin in `~/.agents/.skill-lock.json`. No name-prefix heuristics or manual group list are used. Skills without origin metadata retain their Local/Dotfiles grouping. Recorded origin does not prove that installed contents still match the repository.
+
+The URL preserves category (`view`), source filter (`source`), search (`q`), selected item (`item`), and inspector tab (`tab`). Refresh and browser Back/Forward restore these values. Search updates replace the current history entry. Expanded skill groups persist in this tab's session storage. Missing selected items close the inspector while retaining the saved filters.

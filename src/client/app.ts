@@ -52,6 +52,79 @@ let selectionSequence = 0;
 const expandedSkillSources = new Map<string, boolean>();
 const app = document.querySelector<HTMLDivElement>("#app")!;
 
+function saveView(replace = false) {
+  const url = new URL(location.href);
+  for (const [key, value] of Object.entries({
+    view: category === "all" ? "" : category,
+    source: source === "all" ? "" : source,
+    q: query,
+    item: selectedId,
+    tab: selectedId && detailTab === "content" ? "content" : "",
+  })) {
+    if (value) url.searchParams.set(key, value);
+    else url.searchParams.delete(key);
+  }
+  if (url.href !== location.href)
+    history[replace ? "replaceState" : "pushState"](null, "", url);
+}
+
+async function restoreView() {
+  const params = new URLSearchParams(location.search);
+  const view = params.get("view") ?? "all";
+  category = Object.hasOwn(titles, view) ? (view as Kind) : "all";
+  const filter = params.get("source") ?? "all";
+  source = [
+    "all",
+    "dotfiles",
+    "local",
+    "plugin",
+    "package",
+    "built-in",
+  ].includes(filter)
+    ? filter
+    : "all";
+  query = params.get("q") ?? "";
+  selectedId = inventory.items.some((item) => item.id === params.get("item"))
+    ? params.get("item")!
+    : "";
+  detailTab = params.get("tab") === "content" ? "content" : "source";
+  detail = undefined;
+  saveView(true);
+  const sequence = ++selectionSequence;
+  render();
+  if (selectedId) {
+    try {
+      const next = await api<Detail>(`detail?id=${selectedId}`);
+      if (sequence !== selectionSequence) return;
+      detail = next;
+      updateInspector();
+    } catch (error) {
+      if (sequence === selectionSequence)
+        notify((error as Error).message, true);
+    }
+  }
+}
+
+try {
+  const groups: unknown = JSON.parse(
+    sessionStorage.getItem("myai.skill-groups") ?? "[]",
+  );
+  if (Array.isArray(groups))
+    for (const entry of groups) {
+      if (
+        Array.isArray(entry) &&
+        typeof entry[0] === "string" &&
+        typeof entry[1] === "boolean"
+      )
+        expandedSkillSources.set(entry[0], entry[1]);
+    }
+} catch {
+  /* View navigation works when browser storage is unavailable. */
+}
+window.addEventListener("popstate", () => {
+  if (inventory) void restoreView();
+});
+
 async function api<T>(path: string): Promise<T> {
   const response = await fetch(`/api/${path}`);
   const result = await response.json();
@@ -227,6 +300,14 @@ function renderRows() {
           button.dataset.skillGroup!,
           button.getAttribute("aria-expanded") !== "true",
         );
+        try {
+          sessionStorage.setItem(
+            "myai.skill-groups",
+            JSON.stringify([...expandedSkillSources]),
+          );
+        } catch {
+          /* Expanded groups remain available for this page load. */
+        }
         renderRows();
       };
       if (query.trim())
@@ -302,6 +383,7 @@ function renderInspector() {
 async function select(id: string) {
   selectedId = id;
   detailTab = "source";
+  saveView();
   const sequence = ++selectionSequence;
   render();
   try {
@@ -310,7 +392,7 @@ async function select(id: string) {
     detail = next;
     updateInspector();
   } catch (error) {
-    notify((error as Error).message, true);
+    if (sequence === selectionSequence) notify((error as Error).message, true);
   }
 }
 function updateInspector() {
@@ -331,6 +413,7 @@ async function reload() {
       else {
         selectedId = "";
         detail = undefined;
+        saveView(true);
       }
     }
   } catch (error) {
@@ -345,6 +428,7 @@ function bind() {
     (button) =>
       (button.onclick = () => {
         category = button.dataset.category as typeof category;
+        saveView();
         render();
       }),
   );
@@ -355,12 +439,14 @@ function bind() {
   if (input)
     input.oninput = () => {
       query = input.value;
+      saveView(true);
       renderRows();
     };
   const filter = document.querySelector<HTMLSelectElement>("#source-filter");
   if (filter)
     filter.onchange = () => {
       source = filter.value;
+      saveView();
       renderRows();
     };
   const clear = document.querySelector<HTMLButtonElement>("#clear-filters");
@@ -369,6 +455,7 @@ function bind() {
       query = "";
       source = "all";
       category = "all";
+      saveView();
       render();
     };
   bindInspector();
@@ -396,12 +483,15 @@ function bindInspector() {
     close.onclick = () => {
       selectedId = "";
       detail = undefined;
+      selectionSequence++;
+      saveView();
       render();
     };
   document.querySelectorAll<HTMLButtonElement>("[data-tab]").forEach(
     (button) =>
       (button.onclick = () => {
         detailTab = button.dataset.tab!;
+        saveView();
         updateInspector();
       }),
   );
@@ -409,6 +499,7 @@ function bindInspector() {
   if (read)
     read.onclick = () => {
       detailTab = "content";
+      saveView();
       updateInspector();
     };
 }
@@ -420,13 +511,15 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && selectedId) {
     selectedId = "";
     detail = undefined;
+    selectionSequence++;
+    saveView();
     render();
   }
 });
 async function start() {
   try {
     inventory = await api("inventory");
-    render();
+    await restoreView();
   } catch (error) {
     app.innerHTML = `<main class="boot"><h1>Configuration could not load</h1><p>${escape((error as Error).message)}</p><button class="button" id="retry">Try again</button></main>`;
     document.getElementById("retry")!.onclick = start;
