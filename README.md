@@ -1,12 +1,8 @@
-# AgentFiles
-
-*The truth is in your config.*
-
-Mulder had the X-Files. Your agents have dotfiles. Inspect the evidence: skills, instructions, and the mysterious symlink you forgot you created.
+# My AI
 
 A small, read-only local dashboard for discovering Codex and Pi configuration. Compare skills, instructions, settings, versions, and file links in one browser view.
 
-![AgentFiles with synthetic sample configuration](docs/demo.png)
+![My AI with synthetic sample configuration](docs/demo.png)
 
 ## Try it
 
@@ -25,7 +21,7 @@ To inspect your own configuration:
 npm start
 ```
 
-Open [AgentFiles](http://127.0.0.1:4317/) in your browser. macOS opens it automatically. Linux needs manual opening; Windows support is not verified. The server listens only on `127.0.0.1`. Stop it with Ctrl+C.
+Open [My AI](http://127.0.0.1:4317/) in your browser. macOS opens it automatically. Linux needs manual opening; Windows support is not verified. The server listens only on `127.0.0.1`. Stop it with Ctrl+C.
 
 No account, API key, database, or cloud service is required. Dotfiles and GNU Stow are optional. Standard harness directories are discovered by default.
 
@@ -43,16 +39,16 @@ The URL preserves the category, source filter, search, selected item, and inspec
 
 | Variable              | Default                       |
 | --------------------- | ----------------------------- |
-| `AGENTFILES_HOME`           | Current user's home directory |
+| `MYAI_HOME`           | Current user's home directory |
 | `CODEX_HOME`          | `~/.codex`                    |
 | `PI_CODING_AGENT_DIR` | `~/.pi/agent`                 |
-| `AGENTFILES_DOTFILES`       | Unset; optional               |
-| `AGENTFILES_PORT`           | `4317`                        |
+| `MYAI_DOTFILES`       | Unset; optional               |
+| `MYAI_PORT`           | `4317`                        |
 
 To include a dotfiles repository:
 
 ```sh
-AGENTFILES_DOTFILES=/path/to/dotfiles npm start
+MYAI_DOTFILES=/path/to/dotfiles npm start
 ```
 
 This enables the Dotfiles label and discovery of expected files that have not been linked. Existing symlinks are followed even without a dotfiles path. The expected layout mirrors paths under the home directory; other Stow package layouts are not inferred.
@@ -61,7 +57,7 @@ To use a different port without opening a browser:
 
 ```sh
 npm run build
-AGENTFILES_PORT=4320 node src/server.ts --no-open
+MYAI_PORT=4320 node src/server.ts --no-open
 ```
 
 ## Scope and privacy
