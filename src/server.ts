@@ -13,13 +13,13 @@ import { createDemoHome } from "./demo.ts";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const demo = process.argv.includes("--demo") ? createDemoHome() : undefined;
-const home = demo?.home ?? resolve(process.env.MYAI_HOME ?? homedir());
+const home = demo?.home ?? resolve(process.env.AGENTFILES_HOME ?? homedir());
 const options: ScanOptions = {
   home,
   dotfiles: demo
     ? join(home, "dotfiles")
-    : process.env.MYAI_DOTFILES
-      ? resolve(process.env.MYAI_DOTFILES)
+    : process.env.AGENTFILES_DOTFILES
+      ? resolve(process.env.AGENTFILES_DOTFILES)
       : "",
   codexDir: demo
     ? join(home, ".codex")
@@ -35,7 +35,7 @@ const first = scan(options);
 options.versions = Object.fromEntries(
   first.harnesses.map((h) => [h.id, h.version]),
 );
-const port = Number(process.env.MYAI_PORT ?? 4317);
+const port = Number(process.env.AGENTFILES_PORT ?? 4317);
 let base = "";
 const staticFiles: Record<string, [string, string]> = {
   "/": ["index.html", "text/html"],
@@ -62,7 +62,7 @@ const server = createServer((request, response) => {
     request.headers["sec-fetch-site"] === "cross-site"
   )
     return json(response, 403, {
-      error: "Use the local My AI page to access this server.",
+      error: "Use the local AgentFiles page to access this server.",
     });
   const url = new URL(request.url ?? "/", base);
   try {
@@ -87,7 +87,7 @@ const server = createServer((request, response) => {
     }
     response.setHeader("Allow", "GET");
     return json(response, 405, {
-      error: "My AI is read-only. Only GET requests are supported.",
+      error: "AgentFiles is read-only. Only GET requests are supported.",
     });
   } catch (error) {
     json(response, 400, {
@@ -96,14 +96,14 @@ const server = createServer((request, response) => {
   }
 });
 server.on("error", (error) => {
-  console.error(`My AI could not start: ${error.message}`);
+  console.error(`AgentFiles could not start: ${error.message}`);
   process.exitCode = 1;
 });
 server.listen(port, "127.0.0.1", () => {
   const address = server.address();
   base = `http://127.0.0.1:${typeof address === "object" && address ? address.port : port}`;
   console.log(
-    `My AI → ${base}\nDotfiles: ${options.dotfiles || "Not configured (optional)"}`,
+    `AgentFiles → ${base}\nDotfiles: ${options.dotfiles || "Not configured (optional)"}`,
   );
   if (!process.argv.includes("--no-open") && process.platform === "darwin")
     execFile("open", [base]);

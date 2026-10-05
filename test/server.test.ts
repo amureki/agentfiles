@@ -14,7 +14,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 test("read-only HTTP boundary rejects writes and leaves fixture files unchanged", async (t) => {
-  const home = mkdtempSync(join(tmpdir(), "myai-http-"));
+  const home = mkdtempSync(join(tmpdir(), "agentfiles-http-"));
   for (const dir of [".codex", ".pi/agent", "dotfiles"])
     mkdirSync(join(home, dir), { recursive: true });
   writeFileSync(join(home, ".codex/AGENTS.md"), "Fixture rules\n");
@@ -25,9 +25,9 @@ test("read-only HTTP boundary rejects writes and leaves fixture files unchanged"
     env: {
       ...process.env,
       PATH: "/usr/bin:/bin",
-      MYAI_HOME: home,
-      MYAI_DOTFILES: join(home, "dotfiles"),
-      MYAI_PORT: "0",
+      AGENTFILES_HOME: home,
+      AGENTFILES_DOTFILES: join(home, "dotfiles"),
+      AGENTFILES_PORT: "0",
       CODEX_HOME: join(home, ".codex"),
       PI_CODING_AGENT_DIR: join(home, ".pi/agent"),
     },

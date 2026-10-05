@@ -1,4 +1,4 @@
-# My AI
+# AgentFiles
 
 <!-- impeccable:product-schema 1 -->
 
@@ -35,7 +35,7 @@ First iteration covers global Codex and Pi instructions, skills, Pi extensions a
 
 ## Brand Commitments
 
-Minimal and function first. White, dark text, and neutral gray tones. Use system typography, thin dividers, compact headings, and direct labels. No editorial styling, decorative brand marks, or reassurance copy. Approved first surface: comparison table and source detail panel. Working name inferred from repository: My AI.
+Minimal and function first. White, dark text, and neutral gray tones. Use system typography, thin dividers, compact headings, and direct labels. No editorial styling, decorative brand marks, or reassurance copy. Approved first surface: comparison table and source detail panel. Working name inferred from repository: AgentFiles.
 
 ## Evidence on Hand
 

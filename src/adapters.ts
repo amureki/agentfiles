@@ -568,7 +568,7 @@ export function scan(options: ScanOptions): Inventory {
     warnings: string[] = [];
   if (options.dotfiles && !existsSync(options.dotfiles))
     warnings.push(
-      `Dotfiles directory not found: ${options.dotfiles}. Set MYAI_DOTFILES to your repository path.`,
+      `Dotfiles directory not found: ${options.dotfiles}. Set AGENTFILES_DOTFILES to your repository path.`,
     );
   const origins = new Map<string, NonNullable<Item["origin"]>>();
   const metadataPath = join(options.home, ".agents", ".skill-lock.json");

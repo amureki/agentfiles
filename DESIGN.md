@@ -1,5 +1,5 @@
 ---
-name: My AI
+name: AgentFiles
 description: A minimal file configuration utility.
 colors:
   surface: "#fff"
@@ -74,7 +74,7 @@ components:
     padding: "10px"
 ---
 
-# Design System: My AI
+# Design System: AgentFiles
 
 ## Overview
 

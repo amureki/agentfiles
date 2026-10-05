@@ -11,7 +11,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 
 export function createDemoHome() {
-  const home = realpathSync(mkdtempSync(join(tmpdir(), "myai-demo-")));
+  const home = realpathSync(mkdtempSync(join(tmpdir(), "agentfiles-demo-")));
   try {
     const files = JSON.parse(
       readFileSync(new URL("../examples/demo.json", import.meta.url), "utf8"),

@@ -107,7 +107,7 @@ async function restoreView() {
 
 try {
   const groups: unknown = JSON.parse(
-    sessionStorage.getItem("myai.skill-groups") ?? "[]",
+    sessionStorage.getItem("agentfiles.skill-groups") ?? "[]",
   );
   if (Array.isArray(groups))
     for (const entry of groups) {
@@ -197,7 +197,7 @@ function render() {
   );
   app.innerHTML = `<div class="shell">
     <aside class="sidebar" aria-label="Configuration navigation">
-      <a class="brand" href="/" aria-label="My AI home">my ai</a>
+      <a class="brand" href="/" aria-label="AgentFiles home">AgentFiles</a>
       <nav><button class="nav-item ${category === "all" ? "active" : ""}" data-category="all"><span>All configuration</span><span class="count">${inventory.items.length}</span></button>
       ${Object.entries(titles)
         .map(
@@ -302,7 +302,7 @@ function renderRows() {
         );
         try {
           sessionStorage.setItem(
-            "myai.skill-groups",
+            "agentfiles.skill-groups",
             JSON.stringify([...expandedSkillSources]),
           );
         } catch {

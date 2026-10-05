@@ -17,7 +17,7 @@ import { inspectFile } from "../src/files.ts";
 import { piEnabled, scan } from "../src/adapters.ts";
 
 function fixture(t: TestContext) {
-  const root = realpathSync(mkdtempSync(join(tmpdir(), "myai-test-")));
+  const root = realpathSync(mkdtempSync(join(tmpdir(), "agentfiles-test-")));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const home = join(root, "home"),
     dotfiles = join(home, "dotfiles");
