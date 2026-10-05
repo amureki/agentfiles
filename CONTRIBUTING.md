@@ -19,7 +19,7 @@ npm run build
 npm test
 ```
 
-Tests use disposable fixtures and a local server. Do not add tests that access external services or real harness directories. Linux and macOS run these checks in CI; Windows support is not verified.
+Tests use disposable fixtures and a local server. Do not add tests that access external services or real harness directories. CI runs these checks on Linux; Windows support is not verified.
 
 Keep discovery separate from the interface. Harness adapters belong in `src/adapters.ts`; file inspection belongs in `src/files.ts`. Adding a harness also requires updating the shared types and comparison columns. Explain how availability is inferred and show uncertainty when it cannot be verified.
 
